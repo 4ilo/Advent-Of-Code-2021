@@ -1,26 +1,4 @@
-use std::io::BufRead;
-
-fn get_input_filename() -> String
-{
-    let args: Vec<String> = std::env::args().collect();
-
-    if args.len() < 2 {
-        println!("Missing input file.");
-        std::process::exit(1);
-    }
-
-    args[1].clone()
-}
-
-fn data_from_file(filename: String) -> Vec<String>
-{
-    let file = std::fs::File::open(filename).expect("no such file");
-    let buf = std::io::BufReader::new(file);
-
-    buf.lines()
-        .map(|l| l.expect("Could not parse line"))
-        .collect()
-}
+use utils;
 
 fn vec_sum(data: &Vec<String>) -> Vec<usize>
 {
@@ -113,8 +91,7 @@ fn part2(data: &Vec<String>, criteria: usize) -> u32
 
 fn main()
 {
-    let filename = get_input_filename();
-    let data = data_from_file(filename);
+    let data = utils::read_input_file();
 
     println!("Part 1: {:?}", part1(&data));
     println!("Part 2: {:?}", part2(&data, 1) * part2(&data, 0));

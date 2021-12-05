@@ -1,23 +1,8 @@
-use std::io::BufRead;
+use utils;
 
-fn get_input_filename() -> String
+fn lines_to_int(lines: &Vec<String>) -> Vec<u32>
 {
-    let args: Vec<String> = std::env::args().collect();
-
-    if args.len() < 2 {
-        println!("Missing input file.");
-        std::process::exit(1);
-    }
-
-    args[1].clone()
-}
-
-fn lines_from_file(filename: String) -> Vec<u32>
-{
-    let file = std::fs::File::open(filename).expect("no such file");
-    let buf = std::io::BufReader::new(file);
-    buf.lines()
-        .map(|l| l.expect("Could not parse line").parse::<u32>().unwrap())
+    lines.iter().map(|l| l.parse::<u32>().unwrap())
         .collect()
 }
 
@@ -71,9 +56,9 @@ fn part2(lines: &Vec<u32>) -> u32
 
 fn main()
 {
-    let filename = get_input_filename();
-    let lines = lines_from_file(filename);
+    let lines = utils::read_input_file();
+    let data = lines_to_int(&lines);
 
-    println!("Part 1: {:?}", part1(&lines));
-    println!("Part 2: {:?}", part2(&lines));
+    println!("Part 1: {:?}", part1(&data));
+    println!("Part 2: {:?}", part2(&data));
 }

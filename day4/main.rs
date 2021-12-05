@@ -1,4 +1,4 @@
-use std::io::BufRead;
+use utils;
 
 #[derive(Debug,Clone)]
 struct Board {
@@ -60,39 +60,23 @@ impl Board {
     }
 }
 
-fn get_input_filename() -> String
+fn parse_lines(lines: &Vec<String>) -> (Vec<u32>, Vec<Board>)
 {
-    let args: Vec<String> = std::env::args().collect();
-
-    if args.len() < 2 {
-        println!("Missing input file.");
-        std::process::exit(1);
-    }
-
-    args[1].clone()
-}
-
-fn data_from_file(filename: String) -> (Vec<u32>, Vec<Board>)
-{
-    let file = std::fs::File::open(filename).expect("no such file");
-    let buf = std::io::BufReader::new(file);
-
     let mut numbers = Vec::new();
     let mut boards = Vec::new();
     let mut current_board = Board::new();
 
-    for line in buf.lines() {
-        let line_data = line.unwrap();
+    for line in lines {
         if numbers.len() == 0 {
             // First input row
-            numbers = line_data
+            numbers = line
                 .split(",")
                 .map(|l| l.parse::<u32>().unwrap())
                 .collect();
 
             continue;
         }
-        if line_data.len() == 0 {
+        if line.len() == 0 {
             // Whiteline
             if current_board.lines.len() != 0 {
                 boards.push(current_board);
@@ -102,7 +86,7 @@ fn data_from_file(filename: String) -> (Vec<u32>, Vec<Board>)
         }
 
         current_board.lines.push(
-            line_data.split_whitespace()
+            line.split_whitespace()
                 .map(|l| l.parse::<u32>().unwrap())
                 .collect()
         )
@@ -160,8 +144,8 @@ fn part2(numbers: &Vec<u32>, boards: &mut Vec<Board>) -> u32
 
 fn main()
 {
-    let filename = get_input_filename();
-    let (numbers, boards) = data_from_file(filename);
+    let lines = utils::read_input_file();
+    let (numbers, boards) = parse_lines(&lines);
 
     println!("Part 1: {:?}", part1(&numbers, &mut boards.clone()));
     println!("Part 2: {:?}", part2(&numbers, &mut boards.clone()));

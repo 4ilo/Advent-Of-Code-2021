@@ -1,5 +1,6 @@
 #[macro_use] extern crate scan_fmt;
-use std::io::BufRead;
+
+use utils;
 
 #[derive(Debug)]
 struct Command {
@@ -7,27 +8,12 @@ struct Command {
     unit: i32,
 }
 
-fn get_input_filename() -> String
+fn parse_lines(lines: Vec<String>) -> Vec<Command>
 {
-    let args: Vec<String> = std::env::args().collect();
-
-    if args.len() < 2 {
-        println!("Missing input file.");
-        std::process::exit(1);
-    }
-
-    args[1].clone()
-}
-
-fn data_from_file(filename: String) -> Vec<Command>
-{
-    let file = std::fs::File::open(filename).expect("no such file");
-    let buf = std::io::BufReader::new(file);
-
     let mut data = Vec::new();
 
-    for line in buf.lines() {
-        let (direction, unit) = scan_fmt_some!(&line.expect("Invalid string"), "{} {d}", String, i32);
+    for line in lines {
+        let (direction, unit) = scan_fmt_some!(&line, "{} {d}", String, i32);
         data.push(Command {
             direction: direction.unwrap(),
             unit: unit.unwrap(),
@@ -79,8 +65,8 @@ fn part2(commands: &Vec<Command>) -> i32
 
 fn main()
 {
-    let filename = get_input_filename();
-    let data = data_from_file(filename);
+    let lines = utils::read_input_file();
+    let data = parse_lines(lines);
 
     println!("Part 1: {:?}", part1(&data));
     println!("Part 2: {:?}", part2(&data));
