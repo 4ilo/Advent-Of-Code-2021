@@ -97,12 +97,6 @@ fn part1(mut field: Vec<Vec<Octopus>>, iterations: u32) -> u32
         for y in 0..field.len() {
             for x in 0..field[0].len() {
                 field[y][x].energy_level += 1;
-            }
-        }
-
-        // Flash required octopuses
-        for y in 0..field.len() {
-            for x in 0..field[0].len() {
                 flash_if_needed(&mut field, x, y);
             }
         }
@@ -133,12 +127,6 @@ fn part2(mut field: Vec<Vec<Octopus>>) -> usize
         for y in 0..field.len() {
             for x in 0..field[0].len() {
                 field[y][x].energy_level += 1;
-            }
-        }
-
-        // Flash required octopuses
-        for y in 0..field.len() {
-            for x in 0..field[0].len() {
                 flash_if_needed(&mut field, x, y);
             }
         }
