@@ -1,11 +1,9 @@
 #[macro_use] extern crate scan_fmt;
 use std::collections::HashMap;
 
-use utils;
-
 mod line;
 
-fn data_to_lines(data: &Vec<String>) -> Vec<line::Line>
+fn data_to_lines(data: &[String]) -> Vec<line::Line>
 {
     let mut lines = Vec::new();
 
@@ -17,7 +15,7 @@ fn data_to_lines(data: &Vec<String>) -> Vec<line::Line>
     lines
 }
 
-fn calc(lines: &Vec<line::Line>, skip: bool) -> u32
+fn calc(lines: &[line::Line], skip: bool) -> u32
 {
     let mut counter = 0;
     let mut covered_points: HashMap<line::Point, u32> = HashMap::new();

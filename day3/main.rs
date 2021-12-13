@@ -1,6 +1,5 @@
-use utils;
 
-fn vec_sum(data: &Vec<String>) -> Vec<usize>
+fn vec_sum(data: &[String]) -> Vec<usize>
 {
     let mut sum = vec![0; data[0].len()];
 
@@ -15,7 +14,7 @@ fn vec_sum(data: &Vec<String>) -> Vec<usize>
     sum
 }
 
-fn vec_sum2(data: &Vec<String>, usable_index: &Vec<usize>, offset: usize) -> usize
+fn vec_sum2(data: &[String], usable_index: &[usize], offset: usize) -> usize
 {
     let mut sum = 0;
 
@@ -29,7 +28,7 @@ fn vec_sum2(data: &Vec<String>, usable_index: &Vec<usize>, offset: usize) -> usi
     sum
 }
 
-fn part1(data: &Vec<String>) -> u32
+fn part1(data: &[String]) -> u32
 {
     let sum = vec_sum(data);
 
@@ -53,7 +52,7 @@ fn part1(data: &Vec<String>) -> u32
     gamma * epsilon
 }
 
-fn part2(data: &Vec<String>, criteria: usize) -> u32
+fn part2(data: &[String], criteria: usize) -> u32
 {
     let mut usable_index: Vec<usize> = (0..data.len()).collect();
 
@@ -72,7 +71,7 @@ fn part2(data: &Vec<String>, criteria: usize) -> u32
     let mut oxygen_index = 0;
 
     for i in 0..data[0].len() {
-        let sum = vec_sum2(&data, &usable_index, i);
+        let sum = vec_sum2(data, &usable_index, i);
         let mut common_value = if sum > usable_index.len() / 2 {crit1} else {crit2};
         if usable_index.len() == sum*2 {
             common_value = crit1;

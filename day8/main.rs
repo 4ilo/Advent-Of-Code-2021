@@ -1,5 +1,3 @@
-use utils;
-
 #[derive(Debug,Clone)]
 struct Entry {
     signal_patterns: Vec<String>,
@@ -11,17 +9,17 @@ fn parse_lines(lines: Vec<String>) -> Vec<Entry>
     let mut data = Vec::new();
 
     for line in lines {
-        let mut foo = line.split(" | ");
+        let mut splitted = line.split(" | ");
         data.push(Entry {
-            signal_patterns: foo.nth(0).unwrap().split(" ").map(|l| l.to_string()).collect(),
-            output_values: foo.nth(0).unwrap().split(" ").map(|l| l.to_string()).collect(),
+            signal_patterns: splitted.next().unwrap().split(' ').map(|l| l.to_string()).collect(),
+            output_values: splitted.next().unwrap().split(' ').map(|l| l.to_string()).collect(),
         })
     }
 
     data
 }
 
-fn part1(data: &Vec<Entry>) -> u32
+fn part1(data: &[Entry]) -> u32
 {
     let (mut one, mut four, mut seven, mut eight) = (0, 0, 0, 0);
 
@@ -47,14 +45,14 @@ fn part1(data: &Vec<Entry>) -> u32
     one + four + seven + eight
 }
 
-fn sort_string(input: &String) -> String
+fn sort_string(input: &str) -> String
 {
     let mut tmp = input.chars().collect::<Vec<char>>();
-    tmp.sort();
+    tmp.sort_unstable();
     tmp.iter().collect()
 }
 
-fn digit_in_pattern(digit: &String, pattern: &String) -> bool
+fn digit_in_pattern(digit: &str, pattern: &str) -> bool
 {
     for c in digit.chars() {
         if !pattern.contains(c) {
@@ -62,10 +60,10 @@ fn digit_in_pattern(digit: &String, pattern: &String) -> bool
         }
     }
 
-    return true
+    true
 }
 
-fn get_number(map: &Vec<String>, output_values: &Vec<String>) -> u32
+fn get_number(map: &[String], output_values: &[String]) -> u32
 {
     let mut number = 0;
     for (i, value) in output_values.iter().enumerate() {
@@ -81,7 +79,7 @@ fn get_number(map: &Vec<String>, output_values: &Vec<String>) -> u32
     number as u32
 }
 
-fn part2(data: &Vec<Entry>) -> u32
+fn part2(data: &[Entry]) -> u32
 {
     let mut sum = 0;
     for entry in data {

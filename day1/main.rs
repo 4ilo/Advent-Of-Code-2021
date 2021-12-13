@@ -1,12 +1,10 @@
-use utils;
-
-fn lines_to_int(lines: &Vec<String>) -> Vec<u32>
+fn lines_to_int(lines: &[String]) -> Vec<u32>
 {
     lines.iter().map(|l| l.parse::<u32>().unwrap())
         .collect()
 }
 
-fn part1(lines: &Vec<u32>) -> u32
+fn part1(lines: &[u32]) -> u32
 {
     let mut last_value = 0;
     let mut increase_count = 0;
@@ -27,7 +25,7 @@ fn part1(lines: &Vec<u32>) -> u32
     increase_count
 }
 
-fn part2(lines: &Vec<u32>) -> u32
+fn part2(lines: &[u32]) -> u32
 {
     let mut last_value = 0;
     let mut increase_count = 0;

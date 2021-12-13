@@ -1,5 +1,4 @@
 #[macro_use] extern crate scan_fmt;
-use utils;
 
 use std::collections::HashSet;
 
@@ -9,7 +8,7 @@ struct Point {
     y: i32,
 }
 
-fn data_to_lines(data: &Vec<String>) -> (HashSet<Point>, Vec<(u32, u32)>)
+fn data_to_lines(data: &[String]) -> (HashSet<Point>, Vec<(u32, u32)>)
 {
     let mut points = HashSet::new();
     let mut folds = Vec::new();
@@ -65,7 +64,7 @@ fn do_fold(points: &HashSet<Point>, fold: &(u32, u32)) -> HashSet<Point>
     paper
 }
 
-fn part2(points: &HashSet<Point>, folds: &Vec<(u32, u32)>)
+fn part2(points: &HashSet<Point>, folds: &[(u32, u32)])
 {
     let mut paper = points.clone();
 
@@ -77,7 +76,7 @@ fn part2(points: &HashSet<Point>, folds: &Vec<(u32, u32)>)
     println!("Part2:");
     for y in 0..6 {
         for x in 0..39 {
-            if paper.contains(&Point {x: x, y:y}) {
+            if paper.contains(&Point {x, y}) {
                 print!("#");
             }
             else {
@@ -85,7 +84,7 @@ fn part2(points: &HashSet<Point>, folds: &Vec<(u32, u32)>)
             }
         }
 
-        println!("")
+        println!()
     }
 }
 

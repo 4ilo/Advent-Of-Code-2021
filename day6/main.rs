@@ -1,12 +1,11 @@
-use utils;
 
-fn data_to_int(lines: &String) -> Vec<u8>
+fn data_to_int(lines: &str) -> Vec<u8>
 {
-    lines.split(",").map(|l| l.parse::<u8>().unwrap())
+    lines.split(',').map(|l| l.parse::<u8>().unwrap())
         .collect()
 }
 
-fn calc(starting_fish: &Vec<u8>, days: u32) -> u64
+fn calc(starting_fish: &[u8], days: u32) -> u64
 {
     let mut fish_map = vec![0;9];
 

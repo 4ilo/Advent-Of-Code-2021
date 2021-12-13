@@ -1,5 +1,3 @@
-use utils;
-
 #[derive(Debug, Clone)]
 struct Octopus {
     energy_level: u8,
@@ -8,7 +6,7 @@ struct Octopus {
 
 impl Octopus {
     fn flashable(&self) -> bool {
-        self.energy_level >= 10 && self.flashed != true
+        self.energy_level >= 10 && !self.flashed
     }
 
     fn reset(&mut self) {
@@ -40,10 +38,10 @@ fn get_neighbors(field: &mut Vec<Vec<Octopus>>, x: usize, y: usize) -> Vec<(usiz
 {
     let mut neighbors = Vec::new();
 
-    if (x as i32)-1 >= 0 {
+    if (x as i32) > 0 {
         neighbors.push((y, x-1));
 
-        if (y as i32)-1 >= 0 {
+        if (y as i32) > 0 {
             neighbors.push((y-1, x-1));
         }
         if y+1 < field.len() {
@@ -53,14 +51,14 @@ fn get_neighbors(field: &mut Vec<Vec<Octopus>>, x: usize, y: usize) -> Vec<(usiz
     if x+1 < field[0].len() {
         neighbors.push((y, x+1));
 
-        if (y as i32)-1 >= 0 {
+        if (y as i32) > 0 {
             neighbors.push((y-1, x+1));
         }
         if y+1 < field.len() {
             neighbors.push((y+1, x+1));
         }
     }
-    if (y as i32)-1 >= 0 {
+    if (y as i32) > 0 {
         neighbors.push((y-1, x));
     }
     if y+1 < field.len() {
@@ -155,5 +153,5 @@ fn main()
     let data = parse_lines(lines);
 
     println!("Part 1: {:?}", part1(data.clone(), 100));
-    println!("Part 2: {:?}", part2(data.clone()));
+    println!("Part 2: {:?}", part2(data));
 }

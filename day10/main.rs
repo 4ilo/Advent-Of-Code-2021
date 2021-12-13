@@ -1,6 +1,5 @@
-use utils;
 
-fn lines_to_int(lines: &Vec<String>) -> Vec<Vec<usize>>
+fn lines_to_int(lines: &[String]) -> Vec<Vec<usize>>
 {
     let mut data = Vec::new();
 
@@ -40,7 +39,7 @@ fn get_score(token: usize) -> u32
     }
 }
 
-fn calculate(data: &Vec<Vec<usize>>) -> (u32, usize)
+fn calculate(data: &[Vec<usize>]) -> (u32, usize)
 {
     let mut part1 = 0;
     let mut scores = Vec::new();
@@ -53,15 +52,13 @@ fn calculate(data: &Vec<Vec<usize>>) -> (u32, usize)
             if *token < 4 {
                 opened.push(*token);
             }
+            else if *token-4 == opened.pop().unwrap() {
+                continue;
+            }
             else {
-                if *token-4 == opened.pop().unwrap() {
-                    continue;
-                }
-                else {
-                    corrupt = true;
-                    part1 += get_score(*token);
-                    break
-                }
+                corrupt = true;
+                part1 += get_score(*token);
+                break
             }
         }
 
@@ -77,7 +74,7 @@ fn calculate(data: &Vec<Vec<usize>>) -> (u32, usize)
         }
     }
 
-    scores.sort();
+    scores.sort_unstable();
     (part1, scores[scores.len()/2])
 }
 

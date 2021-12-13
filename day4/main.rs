@@ -1,5 +1,3 @@
-use utils;
-
 #[derive(Debug,Clone)]
 struct Board {
     finished: bool,
@@ -60,25 +58,25 @@ impl Board {
     }
 }
 
-fn parse_lines(lines: &Vec<String>) -> (Vec<u32>, Vec<Board>)
+fn parse_lines(lines: &[String]) -> (Vec<u32>, Vec<Board>)
 {
     let mut numbers = Vec::new();
     let mut boards = Vec::new();
     let mut current_board = Board::new();
 
     for line in lines {
-        if numbers.len() == 0 {
+        if numbers.is_empty() {
             // First input row
             numbers = line
-                .split(",")
+                .split(',')
                 .map(|l| l.parse::<u32>().unwrap())
                 .collect();
 
             continue;
         }
-        if line.len() == 0 {
+        if line.is_empty() {
             // Whiteline
-            if current_board.lines.len() != 0 {
+            if !current_board.lines.is_empty() {
                 boards.push(current_board);
                 current_board = Board::new();
             }
@@ -98,7 +96,7 @@ fn parse_lines(lines: &Vec<String>) -> (Vec<u32>, Vec<Board>)
 }
 
 
-fn part1(numbers: &Vec<u32>, boards: &mut Vec<Board>) -> u32
+fn part1(numbers: &[u32], boards: &mut Vec<Board>) -> u32
 {
     for draw in numbers {
         for board in &mut *boards {
@@ -114,7 +112,7 @@ fn part1(numbers: &Vec<u32>, boards: &mut Vec<Board>) -> u32
     panic!("Unable to find solution");
 }
 
-fn part2(numbers: &Vec<u32>, boards: &mut Vec<Board>) -> u32
+fn part2(numbers: &[u32], boards: &mut Vec<Board>) -> u32
 {
     let mut finished = 0;
     let len = boards.len();
@@ -145,8 +143,8 @@ fn part2(numbers: &Vec<u32>, boards: &mut Vec<Board>) -> u32
 fn main()
 {
     let lines = utils::read_input_file();
-    let (numbers, boards) = parse_lines(&lines);
+    let (numbers, mut boards) = parse_lines(&lines);
 
     println!("Part 1: {:?}", part1(&numbers, &mut boards.clone()));
-    println!("Part 2: {:?}", part2(&numbers, &mut boards.clone()));
+    println!("Part 2: {:?}", part2(&numbers, &mut boards));
 }

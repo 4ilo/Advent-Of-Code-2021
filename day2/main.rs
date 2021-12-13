@@ -1,7 +1,5 @@
 #[macro_use] extern crate scan_fmt;
 
-use utils;
-
 #[derive(Debug)]
 struct Command {
     direction: String,
@@ -23,17 +21,17 @@ fn parse_lines(lines: Vec<String>) -> Vec<Command>
     data
 }
 
-fn get_direction(direction_str: &String) -> (i32, i32)
+fn get_direction(direction_str: &str) -> (i32, i32)
 {
-    match direction_str.as_str() {
-        "forward" => return (1, 0),
-        "down" => return (0, 1),
-        "up" => return (0, -1),
-        _ => return (0, 0),
+    match direction_str {
+        "forward" => (1, 0),
+        "down" => (0, 1),
+        "up" => (0, -1),
+        _ => (0, 0),
     }
 }
 
-fn part1(commands: &Vec<Command>) -> i32
+fn part1(commands: &[Command]) -> i32
 {
     let (mut x, mut y) = (0, 0);
 
@@ -46,7 +44,7 @@ fn part1(commands: &Vec<Command>) -> i32
     x*y
 }
 
-fn part2(commands: &Vec<Command>) -> i32
+fn part2(commands: &[Command]) -> i32
 {
     let (mut x, mut y) = (0, 0);
     let mut aim = 0;

@@ -1,14 +1,12 @@
-use utils;
+type FuelFunction = fn(&[u32], u32) -> u32;
 
-type FuelFunction = fn(&Vec<u32>, u32) -> u32;
-
-fn data_to_int(lines: &String) -> Vec<u32>
+fn data_to_int(lines: &str) -> Vec<u32>
 {
-    lines.split(",").map(|l| l.parse::<u32>().unwrap())
+    lines.split(',').map(|l| l.parse::<u32>().unwrap())
         .collect()
 }
 
-fn part1(positions: &Vec<u32>, target: u32) -> u32
+fn part1(positions: &[u32], target: u32) -> u32
 {
     let mut sum = 0;
 
@@ -19,7 +17,7 @@ fn part1(positions: &Vec<u32>, target: u32) -> u32
     sum
 }
 
-fn part2(positions: &Vec<u32>, target: u32) -> u32
+fn part2(positions: &[u32], target: u32) -> u32
 {
     let mut score = 0;
 
@@ -34,7 +32,7 @@ fn part2(positions: &Vec<u32>, target: u32) -> u32
     score
 }
 
-fn simulate(positions: &Vec<u32>, fuel_function: FuelFunction) -> u32
+fn simulate(positions: &[u32], fuel_function: FuelFunction) -> u32
 {
     let mut best_score: u32 = std::u32::MAX;
 
@@ -53,7 +51,7 @@ fn main()
 {
     let data = utils::read_input_file();
     let mut positions = data_to_int(&data[0]);
-    positions.sort();
+    positions.sort_unstable();
 
     println!("Part 1: {:?}", simulate(&positions, part1));
     println!("Part 2: {:?}", simulate(&positions, part2));
