@@ -11,6 +11,7 @@ path = "utils.rs"
 
 [dependencies]
 scan_fmt = "0.2.6"
+substring = "1.4.5"
 
 [[bin]]
 name = "day1"
@@ -63,3 +64,7 @@ path = "day12/main.rs"
 [[bin]]
 name = "day13"
 path = "day13/main.rs"
+
+[[bin]]
+name = "day14"
+path = "day14/main.rs"
