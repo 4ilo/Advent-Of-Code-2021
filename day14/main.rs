@@ -2,14 +2,14 @@
 use std::collections::HashMap;
 use substring::Substring;
 
-fn parse_lines(data: &[String]) -> (String, HashMap<String, String>)
+fn parse_lines(data: &[String]) -> (String, HashMap<String, char>)
 {
     let mut template = String::new();
     let mut insertion_rules = HashMap::new();
 
     for line in data {
         if line.contains("->") {
-            let (left, right) = scan_fmt_some!(line, "{} -> {}", String, String);
+            let (left, right) = scan_fmt_some!(line, "{} -> {}", String, char);
             insertion_rules.insert(left.unwrap(), right.unwrap());
         }
         else if !line.is_empty() {
@@ -20,36 +20,38 @@ fn parse_lines(data: &[String]) -> (String, HashMap<String, String>)
     (template, insertion_rules)
 }
 
-fn grow_polymer(template: &str, insertion_rules: &HashMap<String, String>) -> String
+fn calc(template: &str, insertion_rules: &HashMap<String, char>, steps: u32) -> u64
 {
-    let mut new_template = String::new();
+    let mut char_map: HashMap<char, u64> = HashMap::new();
+    let mut polymer_map: HashMap<String, u64> = HashMap::new();
 
-    for i in 0..template.len() {
-        new_template += template.substring(i, i+1);
-        if i < template.len()-1 {
-            new_template += insertion_rules.get(template.substring(i, i+2)).unwrap();
+    // Construct initial map
+    for i in 0..template.len()-1 {
+        *polymer_map.entry(template.substring(i, i+2).into()).or_insert(0) += 1;
+    }
+
+    // Create map to store the available amount for each element
+    for c in template.chars() {
+        *(char_map.entry(c).or_insert(0_u64)) += 1;
+    }
+
+    for _i in 0..steps {
+        for (key, value) in polymer_map.clone() {
+            let token1 = format!("{}{}", key.substring(0, 1), insertion_rules.get(&key).unwrap());
+            let token2 = format!("{}{}", insertion_rules.get(&key).unwrap(), key.substring(1, 2));
+
+            // Count the chars in the string
+            *char_map.entry(*insertion_rules.get(&key).unwrap()).or_insert(0_u64) += value;
+
+            *polymer_map.entry(token1).or_insert(0) += value;
+            *polymer_map.entry(token2).or_insert(0) += value;
+            *polymer_map.entry(key).or_insert(0) -= value;
         }
     }
 
-    new_template
-}
-
-fn calc(template: &str, insertion_rules: &HashMap<String, String>, steps: u32) -> u32
-{
-    let mut polymer = template.to_string();
-
-    for _i in 0..steps {
-        polymer = grow_polymer(&polymer, insertion_rules);
-    }
-
-    let mut char_map: HashMap<char, u32> = HashMap::new();
-    for c in polymer.chars() {
-        let value = char_map.entry(c).or_insert(0_u32);
-        *value += 1;
-    }
-
-    let mut sorted_values: Vec<u32> = char_map.into_values().collect();
+    let mut sorted_values: Vec<u64> = char_map.into_values().collect();
     sorted_values.sort_unstable();
+
     sorted_values.last().unwrap() - sorted_values.first().unwrap()
 }
 
@@ -59,5 +61,5 @@ fn main()
     let (template, insertion_rules) = parse_lines(&lines);
 
     println!("Part 1: {:?}", calc(&template, &insertion_rules, 10));
-    //println!("Part 1: {:?}", calc(&template, &insertion_rules, 40));
+    println!("Part 1: {:?}", calc(&template, &insertion_rules, 40));
 }
