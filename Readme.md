@@ -3,3 +3,7 @@
 # Advent of code 2021
 
 Let's try to learn some Rust
+
+```
+cargo run --bin dayx dayx/{input,example}.txt
+```
