@@ -35,7 +35,7 @@ fn get_neighbors(len_x: usize, len_y: usize, x: usize, y: usize) -> Vec<(usize, 
 
 fn get_next_node(unvisited: &HashSet<(usize, usize)>, tentative_distance: &HashMap<(usize, usize), u32>) -> (usize, usize)
 {
-    let mut closest_node = unvisited.iter().nth(0).unwrap();
+    let mut closest_node = unvisited.iter().next().unwrap();
 
     for node in unvisited {
         if tentative_distance.get(node).unwrap_or(&u32::MAX) < tentative_distance.get(closest_node).unwrap_or(&u32::MAX) {
@@ -43,45 +43,7 @@ fn get_next_node(unvisited: &HashSet<(usize, usize)>, tentative_distance: &HashM
         }
     }
 
-    closest_node.clone()
-}
-
-fn part1(lines: &[Vec<u32>]) -> u32
-{
-    let len_x = lines[0].len();
-    let len_y = lines.len();
-
-    let mut unvisited_set = HashSet::new();
-    for y in 0..lines.len() {
-        for x in 0..lines[0].len() {
-            unvisited_set.insert((x, y));
-        }
-    }
-
-    let mut tentative_distance: HashMap<(usize, usize), u32> = HashMap::new();
-    tentative_distance.insert((0, 0), 0);
-
-    while ! unvisited_set.is_empty() {
-        let current_node = get_next_node(&unvisited_set, &tentative_distance);
-        let neighbors = get_neighbors(len_x, len_y, current_node.0, current_node.1);
-        for (n_y, n_x) in neighbors {
-            if !unvisited_set.contains(&(n_x, n_y)) {
-                continue;
-            }
-
-            let current_score = tentative_distance.get(&(n_x, n_y)).unwrap_or(&u32::MAX);
-            let score  = tentative_distance.get(&current_node).unwrap_or(&u32::MAX) + lines[n_y][n_x];
-            *(tentative_distance.entry((n_x, n_y)).or_insert(u32::MAX)) = std::cmp::min(score, *current_score);
-        }
-
-        unvisited_set.remove(&current_node);
-
-        if current_node == (len_x-1, len_y-1) {
-            break;
-        }
-    }
-
-    *tentative_distance.get(&(len_x-1, len_y-1)).unwrap()
+    *closest_node
 }
 
 fn get_risk_level(risk_levels: &[Vec<u32>], x: usize, y: usize) -> u32
@@ -102,10 +64,10 @@ fn get_risk_level(risk_levels: &[Vec<u32>], x: usize, y: usize) -> u32
     }
 }
 
-fn part2(lines: &[Vec<u32>]) -> u32
+fn dijkstra(lines: &[Vec<u32>], chunks: usize) -> u32
 {
-    let len_x = lines[0].len() * 5;
-    let len_y = lines.len() * 5;
+    let len_x = lines[0].len() * chunks;
+    let len_y = lines.len() * chunks;
 
     let mut unvisited_set = HashSet::new();
     for y in 0..len_y {
@@ -119,12 +81,8 @@ fn part2(lines: &[Vec<u32>]) -> u32
 
     while ! unvisited_set.is_empty() {
         let current_node = get_next_node(&unvisited_set, &tentative_distance);
-        let neighbors = get_neighbors(len_x, len_y, current_node.0, current_node.1);
-        for (n_y, n_x) in neighbors {
-            if !unvisited_set.contains(&(n_x, n_y)) {
-                continue;
-            }
 
+        for (n_y, n_x) in get_neighbors(len_x, len_y, current_node.0, current_node.1) {
             let current_score = tentative_distance.get(&(n_x, n_y)).unwrap_or(&u32::MAX);
             let score  = tentative_distance.get(&current_node).unwrap_or(&u32::MAX) + get_risk_level(lines, n_x, n_y);
             *(tentative_distance.entry((n_x, n_y)).or_insert(u32::MAX)) = std::cmp::min(score, *current_score);
@@ -145,6 +103,7 @@ fn main()
     let lines = utils::read_input_file();
     let data = parse_lines(&lines);
 
-    println!("Part 1: {:?}", part1(&data));
-    //println!("Part 2: {:?}", part2(&data));
+    println!("Part 1: {:?}", dijkstra(&data, 1));
+    //println!("Part 2: {:?}", dijkstra(&data, 5));
+    // Part 2 takes += 15min
 }
