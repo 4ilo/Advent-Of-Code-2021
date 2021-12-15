@@ -92,13 +92,13 @@ fn get_risk_level(risk_levels: &[Vec<u32>], x: usize, y: usize) -> u32
     let norm_y = y % risk_levels[0].len();
     let chunk_y = y / risk_levels[0].len();
 
-    let foo = risk_levels[norm_y][norm_x] + chunk_x as u32 + chunk_y as u32;
+    let level = risk_levels[norm_y][norm_x] + chunk_x as u32 + chunk_y as u32;
 
-    if foo > 9 {
-        foo % 9
+    if level > 9 {
+        level % 9
     }
     else {
-        foo
+        level
     }
 }
 
@@ -146,5 +146,5 @@ fn main()
     let data = parse_lines(&lines);
 
     println!("Part 1: {:?}", part1(&data));
-    println!("Part 2: {:?}", part2(&data));
+    //println!("Part 2: {:?}", part2(&data));
 }
